@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>Расписание</h1>
+{% for shedule in doctors_schedule %}
+    <div>
+        <a>{{shedule.doctor}}</a></br>
+        <a>День: {{shedule.day_evenness}}</a></br>
+        <a>Начало: {{shedule.start_time}}</a></br>
+        <a>Конец: {{shedule.end_time}}</a></br>
+        </br>
+    </div>
+{% endfor %}
+{% endblock %}

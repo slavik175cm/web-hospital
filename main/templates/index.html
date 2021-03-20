@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="menu">
+        <a href="/info">Информация нахрен</a></br>
+        <a href="/doctors">Доктора</a></br>
+        <a href="/schedule">Расписание докторов</a></br>
+        <a href="/order/0">Заказать талон</a></br>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

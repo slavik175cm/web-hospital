@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>Доктора</h1>
+{% for doctor in doctors %}
+    <div>
+        <a>{{ doctor.middle_name }}</a>
+        <a>{{ doctor.first_name }}</a>
+        <a>{{ doctor.last_name }}</a></br>
+        <a>Телефон: {{ doctor.phone_number }}</a></br>
+        <a>Квалификация: {{ doctor.qualification }}</a></br>
+        <a>Специальность: {{ doctor.specialty.name }}</a></br>
+        </br>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+.menu{
+    float: left;
+    width: 150px;
+    height: 1000px;
+    margin: 25px;
+}
+
+h1{
+    font-size: 30px;
+}
+
+.content {
+    margin: 10px;
+    text-align: center;
+}
