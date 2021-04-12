@@ -1,13 +1,20 @@
 {% extends "index.html" %}
 {% block content %}
 <h1>Расписание</h1>
-{% for shedule in doctors_schedule %}
-    <div>
-        <a>{{shedule.doctor}}</a></br>
-        <a>День: {{shedule.day_evenness}}</a></br>
-        <a>Начало: {{shedule.start_time}}</a></br>
-        <a>Конец: {{shedule.end_time}}</a></br>
-        </br>
+{% for department in departments %}
+    <div class="department">
+    <a class="department-label">Врач-{{ department.specialty.name }}</a>
+    <div class="doctors">
+    {% for shedule in department.schedules %}
+        <div class="doctor">
+            <a>{{shedule.doctor}}</a></br>
+            <a>День: {{shedule.day_evenness}}</a></br>
+            <a>Начало: {{shedule.start_time}}</a></br>
+            <a>Конец: {{shedule.end_time}}</a></br>
+            </br>
+        </div>
+    {% endfor %}
+    </div>
     </div>
 {% endfor %}
 {% endblock %}

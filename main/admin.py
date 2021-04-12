@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Doctor, Patient, Specialty, Appointment, Schedule
+from django.contrib.auth.models import User
 
 
 class SpecialtyAdmin(admin.ModelAdmin):
@@ -17,7 +18,7 @@ class PatientAdmin(admin.ModelAdmin):
 
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ['visit_time', 'patient', 'doctor', 'status']
+    list_display = ['visit_date', 'visit_time', 'patient', 'doctor', 'status']
 
 
 class ScheduleAdmin(admin.ModelAdmin):

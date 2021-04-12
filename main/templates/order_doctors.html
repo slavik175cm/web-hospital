@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>Заказать талон</h1>
+<a> Врач-{{ specialty }}</a>
+<div class="specialties">
+    <a href="/order/{{ specialty.pk }}/0">Все доктора</a>
+    {% for doctor in doctors %}
+        <a href="/order/{{ specialty.pk }}/{{ doctor.pk }}">{{ doctor }}</a></br>
+    {% endfor %}
+</div>
+{% endblock %}

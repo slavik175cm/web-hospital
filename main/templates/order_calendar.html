@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% block content %}
+<form method="POST" class="calendar">
+    {% csrf_token %}
+    <div class="row">
+        {% for day in week1 %}
+            <button type="submit" class="day" name=day value={{ day.number }}>
+                <a>{{ day.number }}</a></br>
+                <a>{{ day.talons }} тал.</a>
+            </button>
+        {% endfor %}
+    </div>
+    <div class="row">
+        {% for day in week2 %}
+            <button type="submit" class="day" name=day value={{ day.number }}>
+                <a>{{ day.number }}</a></br>
+                <a>{{ day.talons }} тал.</a>
+            </button>
+        {% endfor %}
+    </div>
+    {% if show_talons %}
+        <div class="talons">
+        {% for talon in talons %}
+            {% if talon.taken %}
+                <button class="taken talon" name=talon value={{ talon.day }}\{{ talon.time }}>
+                    <a>{{ talon.time }}</a>
+                </button>
+            {% else %}
+                <button class="not-taken talon" name=talon value={{ talon.day }}\{{ talon.time }}>
+                    <a>{{ talon.time }}</a>
+                </button>
+            {% endif %}
+            </br>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% if show_fields %}
+        <div class="fields">
+            <div>Доктор: {{ doctor_name }}</div>
+            <div>Пациент: {{ patient_name }}</div>
+            <div>День: {{ talon_date }}</div>
+            <div>Время: {{ talon_time }}</div>
+            <button class="accept-button" name=accept value={{ talon_date }}\{{ talon_time }}> Подтвердить </button>
+        </div>
+    {% endif %}
+</form>
+
+{% endblock %}

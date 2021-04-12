@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+{% block content %}
+<body>
+    <div class="wrapper">
+    <div class="registration_label">Регистрация</div>
+    <form method="POST" class="form-group">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">Email</label>
+                <input class="input-field" type="email" name="email">
+            </div>
+
+            <div class="field">
+                <label class="label">Имя</label>
+                <input class="input-field" type="text" name="first_name">
+            </div>
+            <div class="field">
+                <label class="label">Фамилия</label>
+                <input class="input-field" type="text" name="last_name">
+            </div>
+            <div class="field">
+                <label class="label">Отчество</label>
+                <input class="input-field" type="text" name="second_name">
+            </div>
+            <div class="field">
+                <label class="label">Номер телефона</label>
+                <input class="input-field" type="text" name="phone_number">
+            </div>
+            <div class="field">
+                <label class="label">Дата рождения</label>
+                <input class="input-field" type="date" name="birth_date">
+            </div>
+            <div class="field">
+                <label class="label">Пароль</label>
+                <input class="input-field" type="password" name="password1">
+            </div>
+            <div class="field">
+                <label class="label">Поторите пароль</label>
+                <input class="input-field" type="password" name="password2">
+            </div>
+
+            <div class="field">
+                <label class="label">Адресс</label>
+                <input class="input-field" type="text" name="address">
+            </div>
+
+            <button type="submit" class="btn btn-success">Зарегестрироваться</button>
+        </form>
+    </div>
+</body>
+{% endblock %}

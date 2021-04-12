@@ -2,17 +2,32 @@
 <html lang="en">
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
-
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet">
+<script src="{% static "kto-sprashivaet-chto-tut-rabotaet.js" %}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <div class="menu">
-        <a href="/info">Информация нахрен</a></br>
-        <a href="/doctors">Доктора</a></br>
-        <a href="/schedule">Расписание докторов</a></br>
-        <a href="/order/0">Заказать талон</a></br>
+        <a href="/info" id="info">Информация</a></br>
+        <a href="/doctors" id="doctors">Доктора</a></br>
+        <a href="/schedule" id="schedule">Расписание докторов</a></br>
+        <a href="/order" id="order">Заказать талон</a></br>
+    </div>
+
+    <div class="user-menu">
+        {% if not is_user_authenticated %}
+            <a href="/register">Зарегестрируйтесь</a></br>
+            <a href="/login">Войдите в аккаунт</a>
+        {% else %}
+        <a>
+            {{ username }}
+            </br>
+            <a href="/logout">Выйти из аккаунта</a>
+        </a>
+        {% endif %}
     </div>
 
     <div class="content">
