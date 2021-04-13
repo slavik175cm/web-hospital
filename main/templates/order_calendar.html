@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
-<form method="POST" class="calendar">
+    <h1>Выберите день приема</h1>
+    <form method="POST" class="calendar">
     {% csrf_token %}
     <div class="row">
         {% for day in week1 %}
@@ -19,6 +20,8 @@
         {% endfor %}
     </div>
     {% if show_talons %}
+        <div class="talons-wrapper">
+        <h3>Выберите время</h3>
         <div class="talons">
         {% for talon in talons %}
             {% if talon.taken %}
@@ -33,6 +36,7 @@
             </br>
         {% endfor %}
         </div>
+        </div>
     {% endif %}
     {% if show_fields %}
         <div class="fields">
@@ -43,6 +47,15 @@
             <button class="accept-button" name=accept value={{ talon_date }}\{{ talon_time }}> Подтвердить </button>
         </div>
     {% endif %}
+    <div class = "message">
+        <div class="error_message">
+            {{ error_message }}
+        </div>
+        <div class="success_message">
+            {{ success_message }}
+        </div>
+    </div>
+
 </form>
 
 {% endblock %}

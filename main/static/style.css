@@ -101,7 +101,7 @@ h1{
 }
 
 .calendar{
-    margin-top: 100px;
+    margin-top: 15px;
     /*border: 4px double black;*/
     display: flex;
     flex-direction: column;
@@ -119,9 +119,11 @@ h1{
     /*border: 4px double black;*/
 }
 
-
+.talons-wrapper{
+    margin-top: 15px;
+}
 .talons{
-    margin-top: 50px;
+    /*margin-top: 50px;*/
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -162,4 +164,17 @@ h1{
         color: #fff;
         border-radius: 5px;
         border: none;
+}
+
+.message{
+    margin: 15px;
+    margin-top: 25px;
+}
+
+.success_message{
+    color: green;
+}
+
+.error_message{
+    color: pink;
 }

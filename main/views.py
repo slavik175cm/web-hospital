@@ -122,6 +122,7 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
     patient_name = ""
     talon_time = ""
     talon_date = ""
+    success_message = ""
     if request.method == "POST":
         if "accept" in request.POST:
             splitted = request.POST.get('accept').split('\\')
@@ -133,12 +134,12 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
             talon_date = splitted[0]
             talon_time = splitted[1]
             Appointment.objects.create(doctor=doctor, patient=patient, visit_date=talon_date, visit_time=talon_time)
-
+            success_message = "Талон успешно заказан"
             return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
                                                     "show_talons": show_talons, "talons": talons,
                                                     "show_fields": show_fields, 'doctor_name': doctor_name,
                                                     "patient_name": patient_name, "talon_time": talon_time,
-                                                    "talon_date": talon_date}, get_user_info(request)))
+                                                    "talon_date": talon_date, "success_message":success_message}, get_user_info(request)))
         print(request.POST)
         show_talons = True
         current_date = datetime.now()
@@ -163,9 +164,36 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
             talons.append(tln)
 
         if "talon" in request.POST:
+            if not request.user.is_authenticated:
+                return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
+                                                                               "show_talons": show_talons,
+                                                                               "talons": talons,
+                                                                               "show_fields": show_fields,
+                                                                               'doctor_name': doctor_name,
+                                                                               "patient_name": patient_name,
+                                                                               "talon_time": talon_time,
+                                                                               "talon_date": talon_date,
+                                                                               "error_message": "Зарегестрируйтесь чтобы взять талон!"},
+                                                                              get_user_info(request)))
+
             print("!!!!!")
-            show_fields = True
             talon_time = request.POST.get('talon').split('\\')[1]
+            if talon_time[1] == ':':
+                talon_time = '0' + talon_time
+            print(talon_time)
+            print([get_hours_and_minutes(talon) for talon in taken_talons])
+            if talon_time in [get_hours_and_minutes(talon) for talon in taken_talons]:
+                return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
+                                                                               "show_talons": show_talons,
+                                                                               "talons": talons,
+                                                                               "show_fields": show_fields,
+                                                                               'doctor_name': doctor_name,
+                                                                               "patient_name": patient_name,
+                                                                               "talon_time": talon_time,
+                                                                               "talon_date": talon_date,
+                                                                               "error_message": "Данное время занято. Выберите другое"},
+                                                                              get_user_info(request)))
+            show_fields = True
             # talon_date = current_date.strftime("%x")
             talon_date = str(current_date.date())
             if not request.user.is_admin:
@@ -178,4 +206,14 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
                                                    "show_talons": show_talons, "talons": talons,
                                                    "show_fields": show_fields, 'doctor_name': doctor_name,
                                                    "patient_name": patient_name, "talon_time": talon_time,
-                                                   "talon_date": talon_date}, get_user_info(request)))
+                                                   "talon_date": talon_date},
+                                                                  get_user_info(request)))
+
+def get_hours_and_minutes(talon):
+    preh = ""
+    prem = ""
+    if talon.hour < 10:
+        preh = '0'
+    if talon.minute < 10:
+        prem = '0'
+    return preh + str(talon.hour) + ':' + prem + str(talon.minute)

@@ -8,7 +8,12 @@
     {% for shedule in department.schedules %}
         <div class="doctor">
             <a>{{shedule.doctor}}</a></br>
-            <a>День: {{shedule.day_evenness}}</a></br>
+            {% ifequal shedule.day_evenness "2" %}
+                <a>День: четный </a></br>
+            {% else %}
+                <a>День: нечетный </a></br>
+            {% endifequal %}
+
             <a>Начало: {{shedule.start_time}}</a></br>
             <a>Конец: {{shedule.end_time}}</a></br>
             </br>

@@ -40,6 +40,8 @@ class Doctor(Human):
 
         doctor = Doctor.objects.get(pk=doctor_id)
         evenness = int(doctor.schedule.day_evenness)
+        # if not evenness % 2 == date.day % 2:
+        #     return [], []
         # if not day % 2 == evenness:
         #     return []
         start_time = doctor.schedule.start_time
