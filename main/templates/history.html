@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>История посещений</h1></br>
+<div class="appointments">
+{% for appointment in appointments %}
+    <div class="appointment">
+        <h4>{{ appointment.visit_date }}</h4>
+        <a>{{ appointment.visit_time }}</a></br>
+        <a>Врач: {{ appointment.doctor }}</a></br>
+        <a>Статус: {{ appointment.status}}</a></br>
+        {% if appointment.cost %}
+            <a>Цена: {{ appointment.cost}}</a></br>
+            <a>Дней на лечение:{{ appointment.days_to_recover}}</a></br>
+            <a>{{ appointment.treatment}}</a></br>
+        {% endif %}
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

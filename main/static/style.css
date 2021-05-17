@@ -178,3 +178,13 @@ h1{
 .error_message{
     color: pink;
 }
+
+
+.appointments{
+}
+
+.appointment{
+    width: 300px;
+    /*border: 1px solid black;*/
+    margin-bottom: 15px;
+}

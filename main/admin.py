@@ -18,6 +18,11 @@ class PatientAdmin(admin.ModelAdmin):
 
 
 class AppointmentAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super(AppointmentAdmin, self).get_queryset(request)
+        if request.user.is_admin:
+            return qs
+        return qs.filter(doctor=request.user.doctor)
     list_display = ['visit_date', 'visit_time', 'patient', 'doctor', 'status']
 
 

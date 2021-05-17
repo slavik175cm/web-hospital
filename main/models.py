@@ -4,7 +4,9 @@ from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import User
 from authentication.models import Account as User
 # from enum import Enum
+from collections import defaultdict
 from datetime import timedelta, datetime, time
+
 
 def only_letters_validator(value):
     if value.isalpha():
@@ -25,6 +27,7 @@ class Human(models.Model):
 class week:
     pass
 
+
 class Doctor(Human):
     qualifications = (
         ("первая", "первая"),
@@ -34,20 +37,18 @@ class Doctor(Human):
     qualification = models.TextField(null=True, blank=True, choices=qualifications, verbose_name='квалификация')
     specialty = models.ForeignKey('Specialty', on_delete=models.PROTECT, default="Null",
                                   verbose_name='специальность', related_name='doctors')
+    user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
 
     @staticmethod
-    def get_day_talons(date, doctor_id):
-
+    def get_day_talons(date, doctor_id, specialty_id):
+        if doctor_id == 0:
+            return Doctor.get_day_talons_of_all_doctors(date, specialty_id)
         doctor = Doctor.objects.get(pk=doctor_id)
         evenness = int(doctor.schedule.day_evenness)
-        # if not evenness % 2 == date.day % 2:
-        #     return [], []
-        # if not day % 2 == evenness:
-        #     return []
+
         start_time = doctor.schedule.start_time
         end_time = doctor.schedule.end_time
-        # print("minutes: ")
-        # print(temp.minute)
+
         temp = start_time
         appointment_duration = 15
         all_times = []
@@ -60,19 +61,61 @@ class Doctor(Human):
 
         appointments = Appointment.objects.filter(doctor=doctor, visit_date=date)
         appointments_datetimes = appointments.values('visit_time')
-        # print(appointments_datetimes)
-        # for _, app in appointments_datetimes:
+
         taken_times = []
         for i in range(len(appointments_datetimes)):
             app = appointments_datetimes[i]['visit_time']
-            # print(app)
             take_time = time(hour=app.hour, minute=app.minute)
             taken_times.append(take_time)
-        # print(appointments)
-        # print(all_starts)
-        # print(appointments_datetimes)
-        # return [item for item in all_starts if item not in taken_times]
-        return all_times, taken_times
+        return all_times, taken_times, len(all_times) - len(taken_times)
+
+    @staticmethod
+    def get_day_talons_of_all_doctors(date, specialty_id):
+        mem = defaultdict(int)
+        mem_taken = []
+        talons = 0
+        for doctor in Doctor.objects.filter(specialty=Specialty.objects.get(pk=specialty_id)):
+            all_times, taken_times, tlns = Doctor.get_day_talons(date, doctor.pk, specialty_id)
+            talons += tlns
+            for time in all_times:
+                mem[time] += 1
+            for time in taken_times:
+                mem_taken.append(time)
+                mem[time] -= 1
+        res_all_times = []
+        res_taken_times = []
+        for key, value in mem.items():
+            res_all_times.append(key)
+        for time in mem_taken:
+            if not mem[time]:
+                res_taken_times.append(time)
+        return res_all_times, res_taken_times, talons
+
+    @staticmethod
+    def pick_random(specialty_id, talon_date, talon_time):
+        print("pickkkkkkkkkkkkkkkking")
+        # possible = []
+        for doctor in Doctor.objects.filter(specialty=Specialty.objects.get(pk=specialty_id)):
+            all_times, taken_times, tlns = Doctor.get_day_talons(talon_date, doctor.pk, specialty_id)
+            if talon_time in [Doctor.get_hours_and_minutes(time) for time in all_times]\
+                    and talon_time not in [Doctor.get_hours_and_minutes(time) for time in taken_times]:
+                print("Hurray")
+                print(doctor)
+                # possible.append(doctor)
+                return doctor
+        # import random
+        # return random.choice(possible)
+        # return possible.
+
+    @staticmethod
+    def get_hours_and_minutes(talon):
+        preh = ""
+        prem = ""
+        if talon.hour < 10:
+            preh = '0'
+        if talon.minute < 10:
+            prem = '0'
+        return preh + str(talon.hour) + ':' + prem + str(talon.minute)
 
     class Meta:
         verbose_name_plural = "Доктора"
@@ -118,7 +161,7 @@ class Appointment(models.Model):
         ("прошел", "прошел"),
         ("не прошел", "не прошел")
     )
-    status = models.TextField(null=True, blank=True, choices=statuses, verbose_name='статус приема')
+    status = models.TextField(null=True, blank=True, choices=statuses, default=statuses[1][0], verbose_name='статус приема')
     cost = models.CharField(max_length=30, null=True, blank=True, verbose_name='Стоимость(руб.)')
     days_to_recover = models.IntegerField(null=True, blank=True, verbose_name='Дней для выздоровления')
     treatment = models.TextField(null=True, blank=True, verbose_name='Лечение')
@@ -126,7 +169,7 @@ class Appointment(models.Model):
     class Meta:
         verbose_name_plural = 'записи'
         verbose_name = 'запись'
-        ordering = ['visit_date']
+        ordering = ['visit_date', 'visit_time']
 
 
 class Schedule(models.Model):

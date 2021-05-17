@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Specialty, Doctor, Schedule, Patient, Appointment
 import copy
 from datetime import timedelta, datetime, time
@@ -93,25 +93,21 @@ class Day:
 
 def order_calendar_viewer(request, specialty_id, doctor_id):
     current_date = datetime.now()
-    print('current date')
-    print(current_date)
-    print(current_date.strftime("%x"))
     week1 = []
     week2 = []
     for i in range(7):
-        all_talons, taken_talons = Doctor.get_day_talons(current_date.date(), doctor_id)
+        all_talons, taken_talons, talons = Doctor.get_day_talons(current_date.date(), doctor_id, specialty_id)
         day = Day()
-        # current_date.strftime("%x")
         day.__setattr__('number', current_date.date().day)
-        day.__setattr__('talons', len(all_talons) - len(taken_talons))
+        day.__setattr__('talons', talons)
         week1.append(day)
-        current_date = datetime(year=current_date.year, month=current_date.month, day=current_date.day + 1)
+        current_date = get_next_day(current_date)
 
     for i in range(7):
-        all_talons, taken_talons = Doctor.get_day_talons(current_date.date(), doctor_id)
+        all_talons, taken_talons, talons = Doctor.get_day_talons(current_date.date(), doctor_id, specialty_id)
         day = Day()
         day.__setattr__('number', current_date.date().day)
-        day.__setattr__('talons', len(all_talons) - len(taken_talons))
+        day.__setattr__('talons', talons)
         week2.append(day)
         current_date = datetime(year=current_date.year, month=current_date.month, day=current_date.day + 1)
 
@@ -126,13 +122,20 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
     if request.method == "POST":
         if "accept" in request.POST:
             splitted = request.POST.get('accept').split('\\')
-            doctor = Doctor.objects.get(pk=doctor_id)
+            talon_date = splitted[0]
+            talon_time = splitted[1]
+            print("HERE")
+            if not doctor_id == 0:
+                doctor = Doctor.objects.get(pk=doctor_id)
+            else:
+                doctor = Doctor.pick_random(specialty_id, talon_date, talon_time)
+            print("taken")
+            print(doctor)
             if not request.user.is_admin:
                 patient = Patient.objects.get(user=request.user)
             else:
                 patient = None
-            talon_date = splitted[0]
-            talon_time = splitted[1]
+
             Appointment.objects.create(doctor=doctor, patient=patient, visit_date=talon_date, visit_time=talon_time)
             success_message = "Талон успешно заказан"
             return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
@@ -150,7 +153,7 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
 
         current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
 
-        all_talons, taken_talons = Doctor.get_day_talons(current_date, doctor_id)
+        all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, doctor_id, specialty_id)
 
         class Talon:
             pass
@@ -176,12 +179,9 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
                                                                                "error_message": "Зарегестрируйтесь чтобы взять талон!"},
                                                                               get_user_info(request)))
 
-            print("!!!!!")
             talon_time = request.POST.get('talon').split('\\')[1]
             if talon_time[1] == ':':
                 talon_time = '0' + talon_time
-            print(talon_time)
-            print([get_hours_and_minutes(talon) for talon in taken_talons])
             if talon_time in [get_hours_and_minutes(talon) for talon in taken_talons]:
                 return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
                                                                                "show_talons": show_talons,
@@ -194,13 +194,15 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
                                                                                "error_message": "Данное время занято. Выберите другое"},
                                                                               get_user_info(request)))
             show_fields = True
-            # talon_date = current_date.strftime("%x")
             talon_date = str(current_date.date())
             if not request.user.is_admin:
                 patient_name = str(Patient.objects.get(user=request.user))
             else:
                 patient_name = "admin"
-            doctor_name = str(Doctor.objects.get(pk=doctor_id))
+            if not doctor_id == 0:
+                doctor_name = str(Doctor.objects.get(pk=doctor_id))
+            else:
+                doctor_name = str(Doctor.pick_random(specialty_id, current_date, talon_time))
 
     return render(request, 'order_calendar.html', merge_two_dicts({'week1': week1, 'week2': week2,
                                                    "show_talons": show_talons, "talons": talons,
@@ -208,6 +210,7 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
                                                    "patient_name": patient_name, "talon_time": talon_time,
                                                    "talon_date": talon_date},
                                                                   get_user_info(request)))
+
 
 def get_hours_and_minutes(talon):
     preh = ""
@@ -217,3 +220,26 @@ def get_hours_and_minutes(talon):
     if talon.minute < 10:
         prem = '0'
     return preh + str(talon.hour) + ':' + prem + str(talon.minute)
+
+
+def get_next_day(date):
+    try:
+        return datetime(year=date.year, month=date.month, day=date.day + 1)
+    except:
+        try:
+            return datetime(year=date.year, month=date.month+1, day=1)
+        except:
+            return datetime(year=date.year, month=1, day=1)
+
+
+def redirect_viewer(request):
+    response = redirect('info/')
+    return response
+
+
+def history_viewer(request):
+    appointments = Appointment.objects.filter(patient=request.user.patient)
+    response = []
+    for appointment in appointments:
+        response.append(appointment.visit_time)
+    return render(request, 'history.html', merge_two_dicts({"appointments": appointments}, get_user_info(request)))
