@@ -10,11 +10,11 @@ def register_viewer(request):
         form = RegistrationForm(request.POST)
         patient_form = PatientRegistrationForm(request.POST)
         password1 = request.POST.get('password1')
-        password2 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
 
         address = request.POST.get('address')
-        print(password1)
-        print(address)
+        print(form.errors.items())
+        print(patient_form.errors.items())
 
         if form.is_valid() and patient_form.is_valid():
             user = form.save()
@@ -23,21 +23,22 @@ def register_viewer(request):
             patient.user = user
 
             patient.save()
-            # phone_number = request.POST.get('phone_number')
-            # username = request.POST.get('username')
             email = request.POST.get('email')
 
             password = request.POST.get('password1')
-            # print(phone_number)
-            print(email)
-            print(password)
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                print("yoooo")
                 return redirect('/info')
         else:
             print("form is invalid")
+
+            address = request.POST.get('address')
+            print(address)
+
+            firstname = request.POST.get('first_name')
+            print(firstname)
+
             for msg in form.errors.as_data():
                 print(msg)
                 if msg == 'email':
@@ -60,7 +61,7 @@ def login_viewer(request):
             login(request, user)
             return redirect('/info')
         else:
-            messages.info(request, 'something is wrong')
+            messages.info(request, 'почта и/или пароль некорректны')
             return render(request, 'login.html', {})
     # messages.info(request, 'hey there')
     return render(request, 'login.html', {})

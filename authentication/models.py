@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class MyAccountManager(BaseUserManager):
@@ -25,7 +25,7 @@ class MyAccountManager(BaseUserManager):
         return user
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(verbose_name="username", max_length=30, unique=False)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
@@ -44,7 +44,15 @@ class Account(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        return self.is_admin
+        if self.is_admin:
+            return True
+        print("aaaa")
+        print(perm)
+        if perm == "main.change_appointment":
+            return True
+        else:
+            return False
+        # return self.is_admin
 
     def has_module_perms(self, app_label):
         return True

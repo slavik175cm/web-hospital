@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 <body>
-    <div class="wrapper">
+    <div class="register-wrapper">
     <div class="registration_label">Регистрация</div>
     <form method="POST" class="form-group">
             {% csrf_token %}
             <div class="field">
-                <label class="label">Email</label>
+                <label class="label">Электронная почта</label>
                 <input class="input-field" type="email" name="email">
             </div>
 
@@ -27,6 +27,10 @@
                 <input class="input-field" type="text" name="phone_number">
             </div>
             <div class="field">
+                <label class="label">Адресс</label>
+                <input class="input-field" type="text" name="address">
+            </div>
+            <div class="field">
                 <label class="label">Дата рождения</label>
                 <input class="input-field" type="date" name="birth_date">
             </div>
@@ -39,12 +43,7 @@
                 <input class="input-field" type="password" name="password2">
             </div>
 
-            <div class="field">
-                <label class="label">Адресс</label>
-                <input class="input-field" type="text" name="address">
-            </div>
-
-            <button type="submit" class="btn btn-success">Зарегестрироваться</button>
+            <button type="submit" class="btn register-btn-success">Зарегестрироваться</button>
         </form>
     </div>
 </body>
