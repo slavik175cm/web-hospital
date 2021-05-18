@@ -10,14 +10,7 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="menu">
-        <a href="/info" id="info">Информация</a></br>
-        <a href="/doctors" id="doctors">Доктора</a></br>
-        <a href="/schedule" id="schedule">Расписание докторов</a></br>
-        <a href="/order" id="order">Заказать талон</a></br>
-    </div>
-
-    <div class="user-menu">
+        <div class="user-menu">
         {% if not is_user_authenticated %}
             <a href="/register">Зарегестрируйтесь</a></br>
             <a href="/login">Войдите в аккаунт</a>
@@ -29,6 +22,12 @@
             <a href="/logout">Выйти из аккаунта</a>
         </a>
         {% endif %}
+    </div>
+    <div class="menu">
+        <a href="/info" id="info">Информация</a></br>
+        <a href="/doctors" id="doctors">Доктора</a></br>
+        <a href="/schedule" id="schedule">Расписание докторов</a></br>
+        <a href="/order" id="order">Заказать талон</a></br>
     </div>
 
     <div class="content">

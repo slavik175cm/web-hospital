@@ -26,7 +26,7 @@
       "last_login": "2021-05-17T13:27:12.075Z",
       "is_admin": false,
       "is_active": true,
-      "is_staff": false,
+      "is_staff": true,
       "is_superuser": false,
       "groups": [],
       "user_permissions": []
@@ -60,7 +60,7 @@
       "last_login": "2021-05-17T13:27:12.075Z",
       "is_admin": false,
       "is_active": true,
-      "is_staff": false,
+      "is_staff": true,
       "is_superuser": false,
       "groups": [],
       "user_permissions": []
@@ -98,8 +98,8 @@
     "model": "main.human",
     "pk": 2,
     "fields": {
-      "middle_name": "Пациентов",
-      "first_name": "Пациент1",
+      "middle_name": "Пациент",
+      "first_name": "Первый",
       "last_name": "Пациентович",
       "phone_number": "+375441432322",
       "birth_date": "2000-05-17"
@@ -120,8 +120,8 @@
     "model": "main.human",
     "pk": 4,
     "fields": {
-      "middle_name": "Пациентов",
-      "first_name": "Пациент2",
+      "middle_name": "Пациент",
+      "first_name": "Второй",
       "last_name": "Пациентович",
       "phone_number": "+3754298188181",
       "birth_date": "2000-02-01"

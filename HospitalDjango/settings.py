@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
+    # 'crispy_forms',
     'main.apps.MainConfig',
     'authentication.apps.AuthenticationConfig',
 ]
@@ -78,10 +78,20 @@ WSGI_APPLICATION = 'HospitalDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hospital',
+        'USER': 'hospital_user',
+        'PASSWORD': 'goodpassword',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -123,6 +133,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 # CRISPY_TEMPLATE_PACK = 'uni_form'

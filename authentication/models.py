@@ -46,8 +46,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def has_perm(self, perm, obj=None):
         if self.is_admin:
             return True
-        print("aaaa")
-        print(perm)
         if perm == "main.change_appointment":
             return True
         else:

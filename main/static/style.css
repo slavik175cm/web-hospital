@@ -74,6 +74,7 @@ h1{
     position: fixed;
     left: 1200px;
     top: 10px;
+    top: 10px;
     width: 250px;
     padding: 30px;
     /*border: 4px double black;*/
@@ -85,6 +86,8 @@ h1{
     /*transition: 1s;*/
     /*box-shadow: 0 5px 10px 0 rgba(0, 0 ,0, 0.1);*/
     /*border: none;*/
+    border-bottom: 2px solid black;
+    /*border: 4px double black;*/
     /*border-radius: 15px;*/
     /*background-color: aliceblue;*/
     margin: 15px;
@@ -96,7 +99,7 @@ h1{
     font-size: 20px;
 }
 
-.doctor{
+.doctor {
     margin: 10px;
 }
 
@@ -154,16 +157,16 @@ h1{
 }
 
 .accept-button{
-        background: #4272d7;
-        /*padding: 10px;*/
-        margin-top: 10px;
-        width: 120px;
-        height: 35px;
-        cursor: pointer;
-        font-size: 16px;
-        color: #fff;
-        border-radius: 5px;
-        border: none;
+    background: #4272d7;
+    /*padding: 10px;*/
+    margin-top: 10px;
+    width: 120px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
 }
 
 .message{

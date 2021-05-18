@@ -109,7 +109,8 @@ def order_calendar_viewer(request, specialty_id, doctor_id):
         day.__setattr__('number', current_date.date().day)
         day.__setattr__('talons', talons)
         week2.append(day)
-        current_date = datetime(year=current_date.year, month=current_date.month, day=current_date.day + 1)
+        current_date = get_next_day(current_date)
+        # current_date = datetime(year=current_date.year, month=current_date.month, day=current_date.day + 1)
 
     show_talons = False
     show_fields = False
