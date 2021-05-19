@@ -16,12 +16,26 @@ def only_letters_validator(value):
     )
 
 
+def phone_number_validator(value):
+    if not value[0] == '+' or not len(value) == 13 or not value[1:].isdecimal():
+        raise ValidationError(
+            _('невозможный номер'),
+        )
+
+
+def birth_date_validator(date):
+    if date.today().year - date.year > 125:
+        raise ValidationError(
+            _('невозможная дата рождения'),
+        )
+
+
 class Human(models.Model):
     middle_name = models.CharField(max_length=30, null=False, blank=False, verbose_name='Фамилия', validators=[only_letters_validator])
     first_name = models.CharField(max_length=30, null=False, blank=False, verbose_name='Имя', validators=[only_letters_validator])
     last_name = models.CharField(max_length=30, null=False, blank=False, verbose_name='Отчество', validators=[only_letters_validator])
-    phone_number = models.CharField(max_length=30, null=False, blank=False, verbose_name='Номер телефона')
-    birth_date = models.DateField(max_length=30, null=False, verbose_name='Дата рождения')
+    phone_number = models.CharField(max_length=30, null=False, blank=False, verbose_name='Номер телефона', validators=[phone_number_validator])
+    birth_date = models.DateField(max_length=30, null=False, verbose_name='Дата рождения', validators=[birth_date_validator])
 
 
 class week:

@@ -7,12 +7,12 @@
             {% csrf_token %}
             <div class="field">
                 <label class="label">Электронная почта</label>
-                <input class="input-field" type="text" name="username">
+                <input class="input-field" type="text" name="username" value={{ username }}>
             </div>
 
             <div class="field">
                 <label class="label">Пароль</label>
-                <input class="input-field" type="password" name="password">
+                <input class="input-field" type="password" name="password" value={{ password }}>
             </div>
             <div class="messages">
                 {% for message in messages %}
@@ -20,6 +20,10 @@
                 {% endfor %}
             </div>
             <button type="submit" class="btn login-btn-success">Войти</button>
+            <div class="out-refs">
+                <a href="/info" class="to-main">Продолжить без регистрации</a>
+                <a href="/register" class="btn to-register">зарагестрироваться</a>
+            </div>
         </form>
     </div>
 </body>

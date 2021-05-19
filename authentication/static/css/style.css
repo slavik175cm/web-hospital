@@ -32,6 +32,12 @@ body {
     height: 80px;
     margin: 10px;
 }
+.error{
+    font-size: 10px;
+    margin: 0px;
+    padding: 0px;
+    color: red;
+}
 .input-field{
     /*{#margin-top: 6px;#}*/
     border-radius: 6px;
@@ -70,4 +76,21 @@ body {
 .messages{
     margin-left: 12px;
     color: red;
+}
+
+.out-refs{
+    position: fixed;
+    left: 1200px;
+    top: 20px;
+}
+.to-main{
+    font-size: 12px;
+    padding: 2px;
+    border-right: 2px solid grey;
+}
+.to-login{
+    font-size: 12px;
+}
+.to-register{
+    font-size: 12px;
 }

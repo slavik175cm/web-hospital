@@ -33,8 +33,6 @@ class AccountCreationForm(forms.ModelForm):
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super().save(commit=False)
-        print("aaa")
-        print(self.cleaned_data["password1"])
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
@@ -46,7 +44,6 @@ class AccountChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     disabled password hash display field.
     """
-    print("sukaaa")
     password1 = ReadOnlyPasswordHashField()
 
     class Meta:
@@ -62,7 +59,6 @@ class AccountChangeForm(forms.ModelForm):
 
 class AccountAdmin(UserAdmin):
     # The forms to add and change user instances
-    print("bbbb")
     form = AccountChangeForm
     add_form = AccountCreationForm
 

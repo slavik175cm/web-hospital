@@ -7,43 +7,56 @@
             {% csrf_token %}
             <div class="field">
                 <label class="label">Электронная почта</label>
-                <input class="input-field" type="email" name="email">
+                <input class="input-field" type="email" name="email" value={{ email }}>
+                <p class="error">{{ email_error }}</p>
             </div>
 
             <div class="field">
                 <label class="label">Имя</label>
-                <input class="input-field" type="text" name="first_name">
+                <input class="input-field" type="text" name="first_name" value={{ first_name }}>
+                <p class="error">{{ first_name_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Фамилия</label>
-                <input class="input-field" type="text" name="last_name">
+                <input class="input-field" type="text" name="last_name" value={{ last_name }}>
+                <p class="error">{{ last_name_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Отчество</label>
-                <input class="input-field" type="text" name="second_name">
+                <input class="input-field" type="text" name="middle_name" value={{ middle_name }}>
+                <p class="error">{{ middle_name_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Номер телефона</label>
-                <input class="input-field" type="text" name="phone_number">
+                <input class="input-field" type="text" name="phone_number" value={{ phone_number }}>
+                <p class="error">{{ phone_number_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Адресс</label>
-                <input class="input-field" type="text" name="address">
+                <input class="input-field" type="text" name="address" value={{ address }}>
+                <p class="error">{{ address_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Дата рождения</label>
-                <input class="input-field" type="date" name="birth_date">
+                <input class="input-field" type="date" name="birth_date" value={{ birth_date }}>
+                <p class="error">{{ birth_date_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Пароль</label>
-                <input class="input-field" type="password" name="password1">
+                <input class="input-field" type="password" name="password1" value={{ password1 }}>
+                <p class="error">{{ password1_error }}</p>
             </div>
             <div class="field">
                 <label class="label">Поторите пароль</label>
-                <input class="input-field" type="password" name="password2">
+                <input class="input-field" type="password" name="password2"value={{ password2 }}>
+                <p class="error">{{ password2_error }}</p>
             </div>
 
             <button type="submit" class="btn register-btn-success">Зарегестрироваться</button>
+            <div class="out-refs">
+                <a href="/info" class="to-main">Продолжить без регистрации</a>
+                <a href="/login" class="btn to-login">уже есть аккаунт</a>
+            </div>
         </form>
     </div>
 </body>

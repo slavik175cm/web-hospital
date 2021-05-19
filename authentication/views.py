@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm
 from .forms import RegistrationForm, PatientRegistrationForm
 from django.contrib import messages
 
@@ -9,13 +8,6 @@ def register_viewer(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         patient_form = PatientRegistrationForm(request.POST)
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-
-        address = request.POST.get('address')
-        print(form.errors.items())
-        print(patient_form.errors.items())
-
         if form.is_valid() and patient_form.is_valid():
             user = form.save()
 
@@ -30,26 +22,26 @@ def register_viewer(request):
             if user is not None:
                 login(request, user)
                 return redirect('/info')
-        else:
-            print("form is invalid")
-
-            address = request.POST.get('address')
-            print(address)
-
-            firstname = request.POST.get('first_name')
-            print(firstname)
-
-            for msg in form.errors.as_data():
-                print(msg)
-                if msg == 'email':
-                    print("1!")
-                if msg == 'password2' and password1 == password2:
-                    print("2!")
-                elif msg == 'password2' and password1 != password2:
-                    print("3!")
-        return render(request, 'register.html', {"form": form})
+        return render(request, 'register.html', {**{"form": form}, **query_dict_to_dict(form.data),
+                                                 **get_errors_from_query_dict(form.errors.items()),
+                                                 **get_errors_from_query_dict(patient_form.errors.items())})
     else:
         return render(request, 'register.html', {})
+
+
+def query_dict_to_dict(data):
+    data = dict(data)
+    for item in data:
+        data[item] = str(data[item])[2:-2]
+    return data
+
+
+def get_errors_from_query_dict(data):
+    data = dict(data)
+    response = {}
+    for key, value in data.items():
+        response[key + "_error"] = str(value)[26:-10]
+    return response
 
 
 def login_viewer(request):
@@ -62,8 +54,7 @@ def login_viewer(request):
             return redirect('/info')
         else:
             messages.info(request, 'почта и/или пароль некорректны')
-            return render(request, 'login.html', {})
-    # messages.info(request, 'hey there')
+            return render(request, 'login.html', {'username': username, 'password': password})
     return render(request, 'login.html', {})
 
 
