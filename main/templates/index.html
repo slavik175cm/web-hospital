@@ -10,7 +10,14 @@
     <title>Title</title>
 </head>
 <body>
-        <div class="user-menu">
+    <div class="covid-statistics">
+        <a>Статистика по ковид в Беларуси:</a>
+        <p id="cases"></p>
+        <p id="recovered"></p>
+        <p id="deaths"></p>
+        <div class="loader" id="loader"><div class="heart"></div></div>
+    </div>
+    <div class="user-menu">
         {% if not is_user_authenticated %}
             <a href="/register">Зарегестрируйтесь</a></br>
             <a href="/login">Войдите в аккаунт</a>

@@ -8,6 +8,56 @@ const Menu = {
 };
 
 window.onload = () => {
+    if (!sessionStorage.getItem('has_covid_loaded')) {
+        sessionStorage.setItem('has_covid_loaded', "false")
+    }
+    const has_covid_loaded = sessionStorage.getItem('has_covid_loaded');
+    const cases_field = document.getElementById('cases')
+    const recovered_field = document.getElementById('recovered')
+    const deaths_field = document.getElementById('deaths')
+    const loader = document.getElementById('loader')
+    const hideLoader = () => {
+        loader.style.display = 'none'
+    }
+    const saveData = (cases, recovered, deaths) => {
+        sessionStorage.setItem('cases', cases)
+        sessionStorage.setItem('recovered', recovered)
+        sessionStorage.setItem('deaths', deaths)
+    }
+    const showData = (cases, recovered, deaths) => {
+        cases_field.innerText = "Всего случаев: " + cases
+        recovered_field.innerText = "Выздоровело: " + recovered
+        deaths_field.innerText = "Умерло: " + deaths
+    }
+    if (has_covid_loaded === "true") {
+        hideLoader()
+        showData(sessionStorage.getItem('cases'),
+                 sessionStorage.getItem('recovered'),
+                 sessionStorage.getItem('deaths'))
+    }else{
+        //loader.style.display = 'inherit'
+        console.log("in there")
+        setTimeout(
+            () =>
+                fetch('https://covid2019-api.herokuapp.com/v2/country/belarus')
+                    .then(async (r) => {
+                        const {data} = await r.json()
+                        hideLoader()
+                        saveData(data.confirmed, data.recovered, data.deaths)
+                        showData(data.confirmed, data.recovered, data.deaths)
+                    })
+                    .catch(() => {
+                        hideLoader()
+                        cases_field.innerText = "Время ожидания загрузки данных истекло"
+                    }),
+            2000
+        )
+        sessionStorage.setItem('has_covid_loaded', "true")
+    }
+
+
+
+
     if (!sessionStorage.getItem('MENU_SELECTED')) {
         sessionStorage.setItem('MENU_SELECTED', Menu.info)
     }

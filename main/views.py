@@ -3,6 +3,17 @@ from .models import Specialty, Doctor, Schedule, Patient, Appointment
 import copy
 from datetime import timedelta, datetime, time
 
+import urllib.request
+import json
+
+def get_covid_data():
+    response = urllib.request.urlopen('https://covid2019-api.herokuapp.com/v2/country/belarus')
+    data = json.loads(response.read().decode('UTF-8'))["data"]
+    print(data["confirmed"])
+    print(data["deaths"])
+    print(data["recovered"])
+    print(data)
+
 
 def merge_two_dicts(x, y):
     z = x.copy()   # start with x's keys and values
@@ -22,6 +33,7 @@ def get_user_info(request):
 
 
 def info_viewer(request):
+    # get_covid_data()
     username = ""
     if request.user.is_authenticated:
         if request.user.is_admin:
@@ -78,7 +90,6 @@ def order_specialties_viewer(request):
 
 def order_doctors_viewer(request, specialty_id):
     specialty = Specialty.objects.get(pk=specialty_id)
-    print(specialty_id)
     if specialty_id == 0:
         doctors = Doctor.objects.all()
     else:
