@@ -25,7 +25,7 @@
         <div class="talons">
         {% for talon in talons %}
             {% if talon.taken %}
-                <button class="taken talon" name=talon value={{ talon.day }}\{{ talon.time }}>
+                <button class="taken talon" id="talon" name=talon value={{ talon.day }}\{{ talon.time }}>
                     <a>{{ talon.time }}</a>
                 </button>
             {% else %}
