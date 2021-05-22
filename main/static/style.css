@@ -120,6 +120,11 @@ h1{
     background-color: white;
     box-shadow: 0 5px 10px 0 rgba(0, 0 ,0, 0.1);
     /*border: 4px double black;*/
+    user-select: none;
+    padding: 5px;
+}
+.day a{
+  pointer-events: none;
 }
 
 .talons-wrapper{
@@ -140,8 +145,11 @@ h1{
     border: none;
     box-shadow: 0 5px 10px 0 rgba(0, 0 ,0, 0.1);
     margin: 2px;
+    user-select: none;
 }
-
+.talon a{
+    pointer-events: none;
+}
 .taken{
     background-color: pink;
 }

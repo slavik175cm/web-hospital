@@ -56,8 +56,6 @@ window.onload = () => {
     }
 
 
-
-
     if (!sessionStorage.getItem('MENU_SELECTED')) {
         sessionStorage.setItem('MENU_SELECTED', Menu.info)
     }
@@ -75,13 +73,54 @@ window.onload = () => {
         [Menu.schedule]: schedule,
         [Menu.order]: order,
     };
-
+    
     elements[lastClicked].classList.add('menu__selected');
 
-    const getCallbackChangeSessionStorage = (changed) => () => sessionStorage.setItem('MENU_SELECTED', changed);
+    const getCallbackChangeSessionStorage = (changed) => () => {
+        sessionStorage.setItem('MENU_SELECTED', changed);
+        // sessionStorage.removeItem('day_picked')
+        // sessionStorage.removeItem('talon_picked')
+    }
 
     info.addEventListener('click', getCallbackChangeSessionStorage(Menu.info));
     doctors.addEventListener('click', getCallbackChangeSessionStorage(Menu.doctors));
     schedule.addEventListener('click', getCallbackChangeSessionStorage(Menu.schedule));
     order.addEventListener('click', getCallbackChangeSessionStorage(Menu.order));
+
+
+    const btns = document.querySelectorAll('.day')
+    btns.forEach(btn => {
+       btn.addEventListener('click', event => {
+            console.log( event.target.value);
+            sessionStorage.setItem('day_picked', event.target.value)
+       });
+    });
+
+    if (sessionStorage.getItem('day_picked')) {
+        const day_number = sessionStorage.getItem('day_picked')
+        btns.forEach(btn => {
+            if (btn.value === day_number) {
+                btn.style.color = "red"
+            }
+        });
+    }
+
+
+    const talons = document.querySelectorAll('.not-taken')
+    talons.forEach(talon => {
+       talon.addEventListener('click', event => {
+            sessionStorage.setItem('talon_picked', event.target.value)
+            console.log(event.target.value)
+       });
+    });
+
+    if (sessionStorage.getItem('talon_picked')) {
+        const talon_number = sessionStorage.getItem('talon_picked')
+        talons.forEach(talon => {
+            if (talon.value === talon_number) {
+                talon.style.color = "red"
+            }
+        });
+    }
+
 };
