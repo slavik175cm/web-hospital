@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import info_viewer, doctors_viewer, schedule_viewer, \
+from main.views import info_viewer, doctors_viewer, schedule_viewer, \
     order_specialties_viewer, order_doctors_viewer, order_talon_viewer, \
     redirect_to_info, history_viewer
 
