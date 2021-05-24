@@ -198,6 +198,11 @@ h1{
     width: 300px;
     /*border: 1px solid black;*/
     margin-bottom: 15px;
+    display: flex;
+}
+
+.appointment-wrap{
+    /*display: flex;*/
 }
 
 
@@ -275,4 +280,42 @@ h1{
 .heart:before,
 .heart:after {
   background: black;
+}
+
+
+
+.close {
+    border: none;
+    background-color: inherit;
+    position: relative;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 50px;
+    height: 50px;
+    font-size: 0;
+    margin-top: 60px;
+}
+.close:before,
+.close:after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 30px;
+    background-color: grey;
+    transform: rotate(45deg) translate(-50%, -50%);
+    transform-origin: top left;
+    content: '';
+}
+.close:after {
+    transform: rotate(-45deg) translate(-50%, -50%);
+}
+.close:hover{
+    cursor: pointer;
+}
+
+.close:hover::after,
+.close:hover::before{
+    background-color: indianred;
 }

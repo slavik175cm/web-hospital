@@ -79,10 +79,10 @@ def order_doctors_viewer(request, specialty_id):
 
 @my_render('history.html')
 def history_viewer(request):
+    if request.method == "POST":
+        pk = int(request.POST.get('pk_to_delete'))
+        Appointment.objects.get(pk=pk).delete()
     appointments = Appointment.objects.filter(patient=request.user.patient)
-    response = []
-    for appointment in appointments:
-        response.append(appointment.visit_time)
     return {"appointments": appointments}
 
 

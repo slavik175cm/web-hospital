@@ -53,7 +53,8 @@ class OrderTalonPage:
             day = self.request.POST.get('day')
         else:
             day = self.request.POST.get('talon').split('\\')[0]
-        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
+        plus_month = 0 if int(day) > int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
         all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, self.doctor_id, self.specialty_id)
 
         talons = []
@@ -67,7 +68,8 @@ class OrderTalonPage:
         response = {}
         current_date = datetime.now()
         day = self.request.POST.get('talon').split('\\')[0]
-        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
+        plus_month = 0 if int(day) > int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
         all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, self.doctor_id, self.specialty_id)
 
         if not self.request.user.is_authenticated:
