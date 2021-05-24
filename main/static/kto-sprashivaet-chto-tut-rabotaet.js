@@ -11,6 +11,7 @@ window.onload = () => {
     if (!sessionStorage.getItem('has_covid_loaded')) {
         sessionStorage.setItem('has_covid_loaded', "false")
     }
+    const is_covid_loading = sessionStorage.getItem('is_covid_loading');
     const has_covid_loaded = sessionStorage.getItem('has_covid_loaded');
     const cases_field = document.getElementById('cases')
     const recovered_field = document.getElementById('recovered')
@@ -29,14 +30,15 @@ window.onload = () => {
         recovered_field.innerText = "Выздоровело: " + recovered
         deaths_field.innerText = "Умерло: " + deaths
     }
-    if (has_covid_loaded === "true") {
+    if (is_covid_loading === "true"){
+
+    }else if (has_covid_loaded === "true") {
         hideLoader()
         showData(sessionStorage.getItem('cases'),
                  sessionStorage.getItem('recovered'),
                  sessionStorage.getItem('deaths'))
     }else{
-        //loader.style.display = 'inherit'
-        console.log("in there")
+        sessionStorage.setItem('is_covid_loading', "true")
         setTimeout(
             () =>
                 fetch('https://covid2019-api.herokuapp.com/v2/country/belarus')
@@ -78,8 +80,8 @@ window.onload = () => {
 
     const getCallbackChangeSessionStorage = (changed) => () => {
         sessionStorage.setItem('MENU_SELECTED', changed);
-        // sessionStorage.removeItem('day_picked')
-        // sessionStorage.removeItem('talon_picked')
+        sessionStorage.removeItem('day_picked')
+        sessionStorage.removeItem('talon_picked')
     }
 
     info.addEventListener('click', getCallbackChangeSessionStorage(Menu.info));
@@ -93,6 +95,7 @@ window.onload = () => {
        btn.addEventListener('click', event => {
             console.log( event.target.value);
             sessionStorage.setItem('day_picked', event.target.value)
+            sessionStorage.removeItem('talon_picked')
        });
     });
 
@@ -110,7 +113,6 @@ window.onload = () => {
     talons.forEach(talon => {
        talon.addEventListener('click', event => {
             sessionStorage.setItem('talon_picked', event.target.value)
-            console.log(event.target.value)
        });
     });
 
