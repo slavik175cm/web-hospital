@@ -22,4 +22,5 @@ urlpatterns = [
     path('register/', v.register_viewer, name='register'),
     path('login/', v.login_viewer, name='login'),
     path('logout/', v.logout_viewer, name='logout'),
+    path('activate/<uidb64>/<token>/', v.VerificationView.as_view(), name='activate'),
 ]

@@ -53,7 +53,8 @@ class AccountChangeForm(forms.ModelForm):
             'password',
             'is_active',
             'is_admin',
-            "is_superuser"
+            "is_superuser",
+            "is_email_verified"
         )
 
 
@@ -69,7 +70,7 @@ class AccountAdmin(UserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
-        ('Permissions', {'fields': ('is_admin', "is_staff", "is_active", "is_superuser")}),
+        ('Permissions', {'fields': ('is_admin', "is_staff", "is_active", "is_superuser", "is_email_verified")}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
