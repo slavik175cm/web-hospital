@@ -8,9 +8,9 @@ const Menu = {
 };
 
 window.onload = async () => {
-    // if (!sessionStorage.getItem('is_covid_loading')) {
+     if (!sessionStorage.getItem('is_covid_loading')) {
         sessionStorage.setItem('is_covid_loading', "false")
-    // }
+     }
     if (!sessionStorage.getItem('has_covid_loaded')) {
         sessionStorage.setItem('has_covid_loaded', "false")
     }
@@ -40,7 +40,7 @@ window.onload = async () => {
                  sessionStorage.getItem('recovered'),
                  sessionStorage.getItem('deaths'))
 
-    }
+    } else
     if (is_covid_loading === 'false') {
         console.log('hey3')
         sessionStorage.setItem('is_covid_loading', "true")
