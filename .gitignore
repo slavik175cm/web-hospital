@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 .idea/
 users.json
+/data
 /HospitalDjango/config.py
 ### Django ###
 *.log
