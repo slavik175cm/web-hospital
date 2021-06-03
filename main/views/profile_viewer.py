@@ -22,18 +22,18 @@ def profile_viewer(request, user_id):
         password2_error = ''
 
         success_message = ''
-        if data['password'] is '':
+        if data['password'] == '':
             password_error = 'Обязательное поле'
         elif not user.check_password(data['password']):
             password_error = 'Неверный пароль'
 
         if data['new_password1'] != data['new_password2']:
-            password1_error = 'пароли не совпадают'
-            password2_error = 'пароли не совпадают'
+            password1_error = 'новые пароли не совпадают'
+            password2_error = 'новые пароли не совпадают'
 
-        if form.is_valid() and password_error is ''\
-                and password1_error is '' and password2_error is '':
-            if data['new_password1'] is not '':
+        if form.is_valid() and password_error == ''\
+                and password1_error == '' and password2_error == '':
+            if data['new_password1'] != '':
                 user.set_password(data['new_password1'])
                 user.save()
             # patient = form.save(commit=False)
