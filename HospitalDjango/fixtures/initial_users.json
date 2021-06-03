@@ -13,7 +13,8 @@
         "is_staff": true,
         "is_superuser": true,
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "is_email_verified": true
     }},
   {
     "model": "authentication.account",
@@ -29,7 +30,8 @@
       "is_staff": true,
       "is_superuser": false,
       "groups": [],
-      "user_permissions": []
+      "user_permissions": [],
+      "is_email_verified": true
     }
   },
   {
@@ -46,7 +48,8 @@
       "is_staff": false,
       "is_superuser": false,
       "groups": [],
-      "user_permissions": []
+      "user_permissions": [],
+      "is_email_verified": true
     }
   },
     {
@@ -63,7 +66,8 @@
       "is_staff": true,
       "is_superuser": false,
       "groups": [],
-      "user_permissions": []
+      "user_permissions": [],
+      "is_email_verified": true
     }
   },
   {
@@ -80,7 +84,8 @@
       "is_staff": false,
       "is_superuser": false,
       "groups": [],
-      "user_permissions": []
+      "user_permissions": [],
+      "is_email_verified": true
     }
   },
   {

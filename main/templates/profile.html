@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+{% block content %}
+<body>
+    <h1>Профиль</h1>
+    {% if error_message %}
+        <div class="error_message">{{ error_message }}</div>
+    {% else %}
+    <div class="register-wrapper">
+    <form method="POST" class="form-group">
+            {% csrf_token %}
+            <div class="profile-container">
+            <div class="group">
+                <div class="field">
+                    <label class="label">Пароль</label>
+                    <input class="input-field" type="password" name="password" value={{ password }}>
+                    <p class="error">{{ password_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Новый пароль</label>
+                    <input class="input-field" type="password" name="new_password1" value={{ new_password1 }}>
+                    <p class="error">{{ new_password1_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Поторите новый пароль</label>
+                    <input class="input-field" type="password" name="new_password2" value={{ new_password2 }}>
+                    <p class="error">{{ new_password2_error }}</p>
+                </div>
+            </div>
+
+            <div class="group">
+                <div class="field">
+                    <label class="label">Имя</label>
+                    <input class="input-field" type="text" name="first_name" value={{ first_name }}>
+                    <p class="error">{{ first_name_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Фамилия</label>
+                    <input class="input-field" type="text" name="last_name" value={{ last_name }}>
+                    <p class="error">{{ last_name_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Отчество</label>
+                    <input class="input-field" type="text" name="middle_name" value={{ middle_name }}>
+                    <p class="error">{{ middle_name_error }}</p>
+                </div>
+            </div>
+
+            <div class="group">
+                <div class="field">
+                    <label class="label">Номер телефона</label>
+                    <input class="input-field" type="text" name="phone_number" value={{ phone_number }}>
+                    <p class="error">{{ phone_number_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Адресс</label>
+                    <input class="input-field" type="text" name="address" value={{ address }}>
+                    <p class="error">{{ address_error }}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Дата рождения</label>
+                    <input class="input-field" type="date" name="birth_date" value= {{ birth_date }}>
+                    <p class="error">{{ birth_date_error }}</p>
+                </div>
+            </div>
+            </div>
+        <div class="success_message_wrapper"><div class="success_message">{{ success_message }}</div></div>
+        <button type="submit" class="btn btn-cancel">Отмена</button>
+        <button type="submit" class="btn btn-save">Сохранить</button>
+        </form>
+    </div>
+    {% endif %}
+</body>
+{% endblock %}

@@ -1,13 +1,35 @@
 from django.shortcuts import render, redirect
 from main.models import Specialty, Doctor, Schedule, Patient, Appointment
 import copy
-# import urllib.request
-# import json
+from django.contrib.sessions.models import Session
+import urllib.request
+import json
+import threading
+import concurrent.futures
 
 
-# def get_covid_data():
-#     response = urllib.request.urlopen('https://covid2019-api.herokuapp.com/v2/country/belarus')
-#     data = json.loads(response.read().decode('UTF-8'))["data"]
+def receive_covid_data(func, *args, **kwargs):
+    print("string urlopen")
+    response = urllib.request.urlopen('https://covid2019-api.herokuapp.com/v2/country/belarus')
+    data = json.loads(response.read().decode('UTF-8'))["data"]
+    request = args[0]
+    request.session['loaded'] = True
+    request.session['cases'] = data['confirmed']
+    request.session['recovered'] = data['recovered']
+    request.session['deaths'] = data['deaths']
+
+    request.session.save()
+    print(request.session.items())
+
+
+def get_covid_data(request):
+    if not request.session.__contains__('loaded'):
+        return {None: None}
+    else:
+        return {"show_covid": True, "cases": request.session['cases'], "recovered": request.session['recovered'],
+                "deaths": request.session['deaths']}
+
+
 def get_user_info(request):
     username = ""
     if request.user.is_authenticated:
@@ -23,8 +45,17 @@ def my_render(template_name):
     def inner_render(function_to_decorate):
         def wrapper(*args, **kwargs):
             request = args[0]
+            # print("!!!!!!!!!!!", request.session.items())
+            # request.session.flush()
+            # if not request.session.__contains__('loading'):
+            #     request.session['loading'] = True
+            #     my_thread = threading.Thread(target=receive_covid_data, args=(function_to_decorate, *args))
+            #     my_thread.start()
             return render(request, template_name,
-                          {**function_to_decorate(*args, **kwargs), **get_user_info(request)})
+                          {**function_to_decorate(*args, **kwargs),
+                           **get_user_info(request),
+                           # **get_covid_data(request),
+                           })
 
         return wrapper
     return inner_render

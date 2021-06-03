@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet">
-<script src="{% static "kto-sprashivaet-chto-tut-rabotaet.js" %}"></script>
+<script src="{% static "main.js" %}"></script>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -16,18 +16,24 @@
         <p id="recovered"></p>
         <p id="deaths"></p>
         <div class="loader" id="loader"><div class="heart"></div></div>
+{#        {% if show_covid %}#}
+{#            <p id="cases">{{ cases }}</p>#}
+{#            <p id="recovered">{{ recovered }}</p>#}
+{#            <p id="deaths">{{ deaths }}</p>#}
+{#        {% else %}#}
+{#            <div class="loader" id="loader"><div class="heart"></div></div>#}
+{#        {% endif %}#}
     </div>
     <div class="user-menu">
         {% if not is_user_authenticated %}
-            <a href="/register">Зарегестрируйтесь</a></br>
-            <a href="/login">Войдите в аккаунт</a>
+            <a class="account-link" href="/register">Зарегестрируйтесь</a>
+            <a class="account-link" href="/login">Войдите в аккаунт</a>
         {% else %}
-        <a>
-            {{ username }}
-            </br>
-            <a href="/history">История посещений</a></br>
-            <a href="/logout">Выйти из аккаунта</a>
-        </a>
+        <div>
+            <a class="account-link" href="/profile/{{ user.pk }}">{{ username }}</a>
+            <a class="account-link" href="/history">История посещений</a>
+            <a class="account-link" href="/logout">Выйти из аккаунта</a>
+        </div>
         {% endif %}
     </div>
     <div class="menu">
