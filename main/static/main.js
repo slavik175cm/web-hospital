@@ -5,6 +5,8 @@ const Menu = {
     doctors: 2,
     schedule: 3,
     order: 4,
+    profile: 5,
+    history: 6
 };
 
 window.onload = async () => {
@@ -36,6 +38,9 @@ window.onload = async () => {
     if (has_covid_loaded === "true") {
         console.log("hey1")
         hideLoader()
+        if (is_covid_loading === 'false') {
+            cases_field.innerText = "данные не могут быть получены";
+        } else
         showData(sessionStorage.getItem('cases'),
                  sessionStorage.getItem('recovered'),
                  sessionStorage.getItem('deaths'))
@@ -56,12 +61,13 @@ window.onload = async () => {
                     })
                     .catch(() => {
                         hideLoader()
-                        cases_field.innerText = "Время ожидания загрузки данных истекло"
-                        sessionStorage.setItem('has_covid_loaded', "true")
-                        sessionStorage.setItem('is_covid_loading', "false")
+                        // cases_field.innerText = "Время ожидания загрузки данных истекло"
+                        sessionStorage.setItem('has_covid_loaded', "true");
+                        sessionStorage.setItem('is_covid_loading', "false");
+                        cases_field.innerText = "данные не могут быть получены";
                     }),
-            20000
-        )
+            2000
+        );
     }
 
 
@@ -73,7 +79,8 @@ window.onload = async () => {
     const doctors = document.getElementById('doctors');
     const schedule = document.getElementById('schedule');
     const order = document.getElementById('order');
-
+    const profile = document.getElementById('profile');
+    const history = document.getElementById('history');
     const lastClicked = sessionStorage.getItem('MENU_SELECTED');
 
     const elements = {
@@ -81,6 +88,8 @@ window.onload = async () => {
         [Menu.doctors]: doctors,
         [Menu.schedule]: schedule,
         [Menu.order]: order,
+        [Menu.profile]: profile,
+        [Menu.history]: history
     };
 
     elements[lastClicked].classList.add('menu__selected');
@@ -95,6 +104,8 @@ window.onload = async () => {
     doctors.addEventListener('click', getCallbackChangeSessionStorage(Menu.doctors));
     schedule.addEventListener('click', getCallbackChangeSessionStorage(Menu.schedule));
     order.addEventListener('click', getCallbackChangeSessionStorage(Menu.order));
+    profile.addEventListener('click', getCallbackChangeSessionStorage(Menu.profile));
+    history.addEventListener('click', getCallbackChangeSessionStorage(Menu.history));
 
 
     const btns = document.querySelectorAll('.day')

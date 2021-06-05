@@ -162,7 +162,7 @@ class Patient(Human):
         verbose_name = "Пациент"
 
     def __str__(self):
-        return self.middle_name + " " + self.first_name
+        return self.first_name + " " + self.last_name
 
 
 class Appointment(models.Model):

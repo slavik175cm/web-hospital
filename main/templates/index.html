@@ -30,8 +30,8 @@
             <a class="account-link" href="/login">Войдите в аккаунт</a>
         {% else %}
         <div>
-            <a class="account-link" href="/profile/{{ user.pk }}">{{ username }}</a>
-            <a class="account-link" href="/history">История посещений</a>
+            <a class="account-link" id="profile" href="/profile/{{ user.pk }}">{{ username }}</a>
+            <a class="account-link" id="history" href="/history">История посещений</a>
             <a class="account-link" href="/logout">Выйти из аккаунта</a>
         </div>
         {% endif %}
