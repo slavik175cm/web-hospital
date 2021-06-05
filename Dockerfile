@@ -2,8 +2,8 @@
 FROM python:3
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
-RUN apt update
-RUN apt install -y netcat
+RUN apt-get update && apt-get install -y netcat
 COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+RUN pip3 install --upgrade pip && \
+    pip3 install -r requirements.txt
 COPY . /code/
