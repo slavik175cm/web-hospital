@@ -40,9 +40,11 @@ def register_viewer(request):
                                                    'token': token_generator.make_token(user)})
                 activate_url = 'http://' + domain + link
 
-                email_body = "Перейдите по адресу \n" + activate_url + ' для подтверждения электронного адреса\n'
+                email_body = "Здарасвуйте " + patient.first_name + " " + patient.last_name + \
+                             "\nПерейдите по адресу \n" + activate_url + \
+                             ' \nдля подтверждения электронного адреса\n'
 
-                email_subject = 'Активацияя аккаунта поликлиники.'
+                email_subject = 'Активация аккаунта поликлиники.'
                 email = EmailMessage(email_subject, email_body, settings.EMAIL_HOST_USER, to=[email])
 
                 make_new_thread(email.send, fail_silently=False)
@@ -83,6 +85,10 @@ def login_viewer(request):
             messages.info(request, 'подтвердите почту для авторизации')
             return render(request, 'login.html', {'username': username, 'password': password})
         login(request, user)
+        if user.is_admin:
+            return redirect('/admin')
+        if user.is_staff:
+            return redirect('/admin/main/appointment')
         return redirect('/info')
 
     return render(request, 'login.html', {})
