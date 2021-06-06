@@ -4,7 +4,7 @@
 .idea/
 users.json
 /data
-/HospitalDjango/config.py
+# /HospitalDjango/config.py
 ### Django ###
 *.log
 *.pot
