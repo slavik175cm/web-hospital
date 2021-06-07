@@ -28,4 +28,6 @@ doctors visits and change profile.
 Doctors using their accounts can manage visits, like setting cost,
 prescribing treatment, etc
 
-
+### Tests: 
+coverage run -m pytest && coverage html
+![Alt text](./coverage.jpg?raw=true "Title")

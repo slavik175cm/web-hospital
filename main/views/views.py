@@ -8,28 +8,6 @@ import threading
 import concurrent.futures
 
 
-def receive_covid_data(func, *args, **kwargs):
-    print("string urlopen")
-    response = urllib.request.urlopen('https://covid2019-api.herokuapp.com/v2/country/belarus')
-    data = json.loads(response.read().decode('UTF-8'))["data"]
-    request = args[0]
-    request.session['loaded'] = True
-    request.session['cases'] = data['confirmed']
-    request.session['recovered'] = data['recovered']
-    request.session['deaths'] = data['deaths']
-
-    request.session.save()
-    print(request.session.items())
-
-
-def get_covid_data(request):
-    if not request.session.__contains__('loaded'):
-        return {None: None}
-    else:
-        return {"show_covid": True, "cases": request.session['cases'], "recovered": request.session['recovered'],
-                "deaths": request.session['deaths']}
-
-
 def get_user_info(request):
     username = ""
     if request.user.is_authenticated:
