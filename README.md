@@ -1,8 +1,8 @@
 # wep app for hospital
 ### deployed on digital ocean, accessible on http://206.189.58.70:8000
-#### to run locally: 
+### to run locally: 
 
-##### first way using image from dockerhub(https://hub.docker.com/r/slavik175cm/web):
+#### first way using image from dockerhub(https://hub.docker.com/r/slavik175cm/web):
 
 1. copy docker-compose-prod.yml
 2. run
@@ -11,7 +11,7 @@ docker-compose -f docker-compose-prod.yml up --build
 ```
 accessible on 127.0.0.1:8000
 
-##### second way:
+#### second way:
 
 in HospitalDjango/config.py set credentials for email account from which verification letters will be send
 ```
