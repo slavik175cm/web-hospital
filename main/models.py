@@ -59,6 +59,8 @@ class Doctor(Human):
             return Doctor.get_day_talons_of_all_doctors(date, specialty_id)
         doctor = Doctor.objects.get(pk=doctor_id)
         evenness = int(doctor.schedule.day_evenness)
+        if int(date.day + 1) % 2 + 1 != evenness:
+            return [], [], 0
 
         start_time = doctor.schedule.start_time
         end_time = doctor.schedule.end_time

@@ -9,15 +9,24 @@ def order_talon_viewer(request, specialty_id, doctor_id):
     page = OrderTalonPage(specialty_id, doctor_id, request)
     page.show_weeks()
     if request.method == "POST":
+        suddenly_taken = False
         if "accept" in request.POST:
-            page.make_appointment()
-            return page.get_response()
-
+            splitted = request.POST.get('accept').split('\\')
+            talon_date, talon_time = splitted[0], splitted[1]
+            obj = Appointment.objects.filter(visit_date=datetime(int(talon_date[0:4]), int(talon_date[5:7]), int(talon_date[8:10])),
+                                          visit_time=time(int(talon_time[0:2]), int(talon_time[3:5])))
+            if len(obj) == 0:
+                page.make_appointment()
+                return page.get_response()
+            else:
+                suddenly_taken = True
         page.show_talons()
-        if "talon" not in request.POST:
+        if "accept" not in request.POST and "talon" not in request.POST:
             return page.get_response()
-
-        page.show_talon_info()
+        if suddenly_taken:
+            page.add_to_response({"error_message": "Уупс, ваш талон уже забрали"})
+        else:
+            page.show_talon_info()
     return page.get_response()
 
 
@@ -51,6 +60,8 @@ class OrderTalonPage:
         current_date = datetime.now()
         if 'day' in self.request.POST:
             day = self.request.POST.get('day')
+        elif 'accept' in self.request.POST:
+            day = self.request.POST.get('accept')[8:10]
         else:
             day = self.request.POST.get('talon').split('\\')[0]
         plus_month = 0 if int(day) > int(current_date.day) else 1
@@ -103,7 +114,7 @@ class OrderTalonPage:
         if not self.doctor_id == 0:
             doctor = Doctor.objects.get(pk=self.doctor_id)
         else:
-            doctor = Doctor.pick_random(self.specialty_id, talon_date, talon_time)
+            doctor = Doctor.pick_random(self.specialty_id, datetime(int(talon_date[0:4]), int(talon_date[5:7]), int(talon_date[8:10])), talon_time)
 
         if not self.request.user.is_admin:
             patient = Patient.objects.get(user=self.request.user)
