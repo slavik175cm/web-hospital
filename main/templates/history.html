@@ -5,6 +5,7 @@
 {% for appointment in appointments %}
     <form method="POST" class="appointment" >
         {% csrf_token %}
+        <button type="submit" class="close" name=pk_to_delete value={{ appointment.pk }}></button>
         <div class="appointment-wrap">
             <h4>{{ appointment.visit_date }}</h4>
             <a>{{ appointment.visit_time }}</a></br>
@@ -16,7 +17,6 @@
                 <a>{{ appointment.treatment}}</a></br>
             {% endif %}
         </div>
-        <button type="submit" class="close" name=pk_to_delete value={{ appointment.pk }}></button>
     </form>
 {% endfor %}
 </div>

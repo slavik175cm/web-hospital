@@ -6,37 +6,42 @@
     <div class="row">
         {% for day in week1 %}
             <button type="submit" class="day" name=day value={{ day.number }}>
-                <a>{{ day.number }}</a></br>
-                <a>{{ day.talons }} тал.</a>
+                <div>{{ day.number }}</div>
+                <div>{{ day.talons }} тал.</div>
             </button>
         {% endfor %}
     </div>
     <div class="row">
         {% for day in week2 %}
             <button type="submit" class="day" name=day value={{ day.number }}>
-                <a>{{ day.number }}</a></br>
-                <a>{{ day.talons }} тал.</a>
+                <div>{{ day.number }}</div>
+                <div>{{ day.talons }} тал.</div>
             </button>
         {% endfor %}
     </div>
     {% if show_talons %}
-        <div class="talons-wrapper">
-        <h3>Выберите время</h3>
-        <div class="talons">
-        {% for talon in talons %}
-            {% if talon.taken %}
-                <button class="taken talon" id="talon" name=talon value={{ talon.day }}\{{ talon.time }}>
-                    <a>{{ talon.time }}</a>
-                </button>
-            {% else %}
-                <button class="not-taken talon" name=talon value={{ talon.day }}\{{ talon.time }}>
-                    <a>{{ talon.time }}</a>
-                </button>
-            {% endif %}
-            </br>
-        {% endfor %}
-        </div>
-        </div>
+        {% if talons %}
+
+            <div class="talons-wrapper">
+            <h3>Выберите время</h3>
+            <div class="talons">
+            {% for talon in talons %}
+                {% if talon.taken %}
+                    <button class="talon talon__taken" id="talon" name=talon value={{ talon.day }}\{{ talon.time }}>
+                        <a>{{ talon.time }}</a>
+                    </button>
+                {% else %}
+                    <button class="talon not-taken" name=talon value={{ talon.day }}\{{ talon.time }}>
+                        <a>{{ talon.time }}</a>
+                    </button>
+                {% endif %}
+                </br>
+            {% endfor %}
+            </div>
+        {% else %}
+            <h3>Талонов на этот день нет</h3>
+        {% endif %}
+    </div>
     {% endif %}
     {% if show_fields %}
         <div class="fields">
