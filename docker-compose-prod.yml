@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
-    image: slavik175cm/web:v10
+    image: slavik175cm/web:v12
     command: bash -c "
        chmod +x ./wait-for-it.sh &&
        ./wait-for-it.sh &&

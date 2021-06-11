@@ -17,13 +17,11 @@ def profile_viewer(request, user_id):
     if request.method == "POST":
         form = ProfileForm(request.POST)
         data = query_dict_to_dict(form.data)
-        print(data)
         password_error = ''
         password1_error = ''
         password2_error = ''
 
         success_message = ''
-        print(user.password)
         if data['password'] == '':
             password_error = 'Обязательное поле'
         elif not user.check_password(data['password']):
@@ -32,9 +30,6 @@ def profile_viewer(request, user_id):
         if data['new_password1'] != data['new_password2']:
             password1_error = 'пароли не совпадают'
             password2_error = 'пароли не совпадают'
-        print("asa", form.is_valid())
-        print(**get_errors_from_query_dict(form.errors))
-        print(password_error)
         if form.is_valid() and password_error == ''\
                 and password1_error == '' and password2_error == '':
             if data['new_password1'] != '':

@@ -10,21 +10,32 @@ def order_talon_viewer(request, specialty_id, doctor_id):
     page.show_weeks()
     if request.method == "POST":
         suddenly_taken = False
+        already_gone = False
         if "accept" in request.POST:
             splitted = request.POST.get('accept').split('\\')
             talon_date, talon_time = splitted[0], splitted[1]
-            obj = Appointment.objects.filter(visit_date=datetime(int(talon_date[0:4]), int(talon_date[5:7]), int(talon_date[8:10])),
-                                          visit_time=time(int(talon_time[0:2]), int(talon_time[3:5])))
-            if len(obj) == 0:
+            talon_date = datetime(int(talon_date[0:4]), int(talon_date[5:7]), int(talon_date[8:10]))
+            talon_time = time(int(talon_time[0:2]), int(talon_time[3:5]))
+            obj = Appointment.objects.filter(visit_date=talon_date, visit_time=talon_time)
+            print(datetime.now().date())
+            print(talon_date)
+            print(datetime.now().date() == talon_date)
+            print(talon_time)
+            print(datetime.now().time())
+            if datetime.now().date() == talon_date.date() and talon_time <= datetime.now().time():
+                already_gone = True
+            elif len(obj) != 0:
+                suddenly_taken = True
+            else:
                 page.make_appointment()
                 return page.get_response()
-            else:
-                suddenly_taken = True
         page.show_talons()
         if "accept" not in request.POST and "talon" not in request.POST:
             return page.get_response()
         if suddenly_taken:
             page.add_to_response({"error_message": "Уупс, ваш талон уже забрали"})
+        elif already_gone:
+            page.add_to_response({"error_message": "Уупс, вы опоздали"})
         else:
             page.show_talon_info()
     return page.get_response()
@@ -64,10 +75,9 @@ class OrderTalonPage:
             day = self.request.POST.get('accept')[8:10]
         else:
             day = self.request.POST.get('talon').split('\\')[0]
-        plus_month = 0 if int(day) > int(current_date.day) else 1
-        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
-        all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, self.doctor_id, self.specialty_id)
-
+        # plus_month = 0 if int(day) > int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
+        all_talons, taken_talons, talons = Doctor.get_day_talons(current_date.date(), self.doctor_id, self.specialty_id)
         talons = []
         for talon in all_talons:
             talons.append(type('talon', (), {'time': talon, 'taken': talon in taken_talons, 'day': day}))
@@ -79,8 +89,8 @@ class OrderTalonPage:
         response = {}
         current_date = datetime.now()
         day = self.request.POST.get('talon').split('\\')[0]
-        plus_month = 0 if int(day) > int(current_date.day) else 1
-        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
+        # plus_month = 0 if int(day) > int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
         all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, self.doctor_id, self.specialty_id)
 
         if not self.request.user.is_authenticated:

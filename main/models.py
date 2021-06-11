@@ -64,12 +64,13 @@ class Doctor(Human):
 
         start_time = doctor.schedule.start_time
         end_time = doctor.schedule.end_time
-
+        now_time = datetime.now().time()
         temp = start_time
         appointment_duration = 15
         all_times = []
         while temp < end_time:
-            all_times.append(temp)
+            if not (date == datetime.now().date() and temp <= now_time):
+                all_times.append(temp)
             if temp.minute + appointment_duration >= 60:
                 temp = time(hour=temp.hour + 1, minute=(temp.minute + appointment_duration) % 60)
             else:
@@ -109,15 +110,11 @@ class Doctor(Human):
 
     @staticmethod
     def pick_random(specialty_id, talon_date, talon_time):
-        print("pickkkkkkkkkkkkkkkking")
         # possible = []
         for doctor in Doctor.objects.filter(specialty=Specialty.objects.get(pk=specialty_id)):
             all_times, taken_times, tlns = Doctor.get_day_talons(talon_date, doctor.pk, specialty_id)
             if talon_time in [Doctor.get_hours_and_minutes(time) for time in all_times]\
                     and talon_time not in [Doctor.get_hours_and_minutes(time) for time in taken_times]:
-                print("Hurray")
-                print(doctor)
-                # possible.append(doctor)
                 return doctor
         # import random
         # return random.choice(possible)
