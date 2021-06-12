@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+FILE_CHARSET = 'UTF-8'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -24,9 +24,9 @@ SECRET_KEY = 'pz=ounc9k96&wa0c6^)29$3naff)pgootdi8&p0d@r3vx5*(no'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
-from HospitalDjango.config import *
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "*"]
+from  HospitalDjango.config import *
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'crispy_forms',
     'main.apps.MainConfig',
-    'authentication.apps.AuthenticationConfig',
+    'authentication.apps.AuthenticationConfig'
     # 'authentication.apps.SendEmailConfig',
 ]
 
@@ -62,6 +62,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'HospitalDjango.urls'
@@ -85,7 +89,6 @@ TEMPLATES = [
 
 AUTH_USER_MODEL = 'authentication.Account'
 WSGI_APPLICATION = 'HospitalDjango.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -131,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Minsk'
 
 USE_I18N = True
 
@@ -143,7 +146,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# STATIC_URL = './main/static/'
+# STATIC_ROOT = './main/static/'
+# STATIC_URL = '/static/'
+# BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+# STATICFILES_FINDERS = (
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+# )
+# STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 # CRISPY_TEMPLATE_PACK = 'uni_form'

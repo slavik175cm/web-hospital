@@ -83,7 +83,8 @@ class Doctor(Human):
         for i in range(len(appointments_datetimes)):
             app = appointments_datetimes[i]['visit_time']
             take_time = time(hour=app.hour, minute=app.minute)
-            taken_times.append(take_time)
+            if not (date == datetime.now().date() and take_time <= now_time):
+                taken_times.append(take_time)
         return all_times, taken_times, len(all_times) - len(taken_times)
 
     @staticmethod
