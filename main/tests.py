@@ -13,7 +13,7 @@ from django.contrib.auth import login, authenticate
 import pytest
 
 url_names = ["info", "doctor", "schedule", "order specialties", "history"]
-class TestViews:
+class Test:
     @pytest.mark.django_db
     def test_1(self):
         self.factory = RequestFactory()

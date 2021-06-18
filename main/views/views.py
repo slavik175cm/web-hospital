@@ -6,6 +6,7 @@ import urllib.request
 import json
 import threading
 import concurrent.futures
+import logging
 
 
 def get_user_info(request):
@@ -90,6 +91,8 @@ def order_doctors_viewer(request, specialty_id):
 def history_viewer(request):
     if request.method == "POST":
         pk = int(request.POST.get('pk_to_delete'))
+        app = Appointment.objects.get(pk=pk)
+        logging.info("Пациент {0} удалил талон на {1} {2}".format(app.patient, app.visit_date, app.visit_time))
         Appointment.objects.get(pk=pk).delete()
     appointments = Appointment.objects.filter(patient=request.user.patient)
     return {"appointments": appointments}

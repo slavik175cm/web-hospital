@@ -2,7 +2,7 @@ from .views import my_render
 from authentication.models import Account as User
 from main.models import Patient
 from main.forms import ProfileForm
-
+import logging
 
 @my_render('profile.html')
 def profile_viewer(request, user_id):
@@ -49,8 +49,11 @@ def profile_viewer(request, user_id):
             patient.phone_number = updated_patient.phone_number
 
             patient.save()
-
+            if data['new_password1'] != '':
+                logging.info("Пациент {0} изменил пароль".format(patient))
+            logging.info("Пациент {0} изменил профиль".format(patient))
             success_message = 'Данные успешно сохранены'
+
         return {**data, **get_errors_from_query_dict(form.errors),
                 "success_message": success_message, "password_error": password_error,
                 "new_password1_error": password1_error, "new_password2_error": password2_error}

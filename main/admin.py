@@ -19,7 +19,7 @@ class PatientAdmin(admin.ModelAdmin):
 
 class AppointmentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
-        qs = super(AppointmentAdmin, self).get_queryset(request)
+        qs = super(AppointmentAdmin, self).get_queryset(request).select_related('doctor', 'patient').all()
         if request.user.is_admin:
             return qs
         return qs.filter(doctor=request.user.doctor)

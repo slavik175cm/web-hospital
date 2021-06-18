@@ -8,7 +8,7 @@ from .views import login_viewer
 import pytest
 
 
-class TestViews:
+class Test:
     def test_1(self):
         self.factory = RequestFactory()
         request = self.factory.get('/admin')

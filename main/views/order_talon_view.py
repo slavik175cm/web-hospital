@@ -2,12 +2,14 @@ from datetime import timedelta, datetime, time
 from django.shortcuts import render, redirect
 from main.models import Specialty, Doctor, Schedule, Patient, Appointment
 from .views import get_user_info, my_render
+import logging
 
 
 @my_render('order_talon.html')
 def order_talon_viewer(request, specialty_id, doctor_id):
     page = OrderTalonPage(specialty_id, doctor_id, request)
     page.show_weeks()
+    logging.debug(request)
     if request.method == "POST":
         suddenly_taken = False
         already_gone = False
@@ -17,11 +19,6 @@ def order_talon_viewer(request, specialty_id, doctor_id):
             talon_date = datetime(int(talon_date[0:4]), int(talon_date[5:7]), int(talon_date[8:10]))
             talon_time = time(int(talon_time[0:2]), int(talon_time[3:5]))
             obj = Appointment.objects.filter(visit_date=talon_date, visit_time=talon_time)
-            print(datetime.now().date())
-            print(talon_date)
-            print(datetime.now().date() == talon_date)
-            print(talon_time)
-            print(datetime.now().time())
             if datetime.now().date() == talon_date.date() and talon_time <= datetime.now().time():
                 already_gone = True
             elif len(obj) != 0:
@@ -75,8 +72,8 @@ class OrderTalonPage:
             day = self.request.POST.get('accept')[8:10]
         else:
             day = self.request.POST.get('talon').split('\\')[0]
-        # plus_month = 0 if int(day) > int(current_date.day) else 1
-        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
+        plus_month = 0 if int(day) >= int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
         all_talons, taken_talons, talons = Doctor.get_day_talons(current_date.date(), self.doctor_id, self.specialty_id)
         talons = []
         for talon in all_talons:
@@ -89,8 +86,8 @@ class OrderTalonPage:
         response = {}
         current_date = datetime.now()
         day = self.request.POST.get('talon').split('\\')[0]
-        # plus_month = 0 if int(day) > int(current_date.day) else 1
-        current_date = datetime(year=current_date.year, month=current_date.month, day=int(day))
+        plus_month = 0 if int(day) >= int(current_date.day) else 1
+        current_date = datetime(year=current_date.year, month=current_date.month + plus_month, day=int(day))
         all_talons, taken_talons, talons = Doctor.get_day_talons(current_date, self.doctor_id, self.specialty_id)
 
         if not self.request.user.is_authenticated:
@@ -133,6 +130,7 @@ class OrderTalonPage:
 
         Appointment.objects.create(doctor=doctor, patient=patient, visit_date=talon_date, visit_time=talon_time)
         self.add_to_response({"success_message": "Талон успешно заказан"})
+        logging.info("Пациент {0} взял талон на {1} {2}".format(patient, talon_date, talon_time))
 
 
 def get_hours_and_minutes(talon):

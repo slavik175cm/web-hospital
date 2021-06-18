@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import logging
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 FILE_CHARSET = 'UTF-8'
@@ -164,3 +165,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 # CRISPY_TEMPLATE_PACK = 'uni_form'
+
+# logging settings
+logging_args = {
+    "format": '%(asctime)s %(message)s',
+    "datefmt": '%m/%d/%Y %I:%M:%S %p',
+    "level": logging.INFO,
+    "filename": "log.txt"
+}
+logging.basicConfig(**logging_args)
+

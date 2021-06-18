@@ -11,6 +11,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 import threading
+import logging
 
 
 def make_new_thread(func, *args, **kwargs):
@@ -49,6 +50,7 @@ def register_viewer(request):
 
                 make_new_thread(email.send, fail_silently=False)
                 messages.success(request, 'подтвердите почту для авторизации')
+                logging.info("Пациенту {0} выслана ссылка для активации аккаунта".format(patient))
 
                 return redirect('/login')
         return render(request, 'register.html', {**{"form": form}, **query_dict_to_dict(form.data),
@@ -80,15 +82,19 @@ def login_viewer(request):
         user = authenticate(request, username=username, password=password)
         if user is None:
             messages.info(request, 'почта и/или пароль некорректны')
+            logging.info("Юзер с логином {0} не смог войти".format(username))
             return render(request, 'login.html', {'username': username, 'password': password})
         elif not user.is_email_verified:
             messages.info(request, 'подтвердите почту для авторизации')
             return render(request, 'login.html', {'username': username, 'password': password})
         login(request, user)
         if user.is_admin:
+            logging.info("Админ {0} зашел в аккаунт".format(user))
             return redirect('/admin')
         if user.is_staff:
+            logging.info("Доктор {0} зашел в аккаунт".format(user))
             return redirect('/admin/main/appointment')
+        logging.info("Пациент {0} зашел в аккаунт".format(user))
         return redirect('/info')
 
     return render(request, 'login.html', {})
@@ -117,7 +123,9 @@ class VerificationView(views.View):
 
             user.save()
             messages.info(request, 'Ваш аккаунт был успешно активирован!')
+            logging.info("Пациент {0} успешно активировал аккаунт")
             return redirect('/login')
         else:
             messages.info(request, f'Активационная ссылка некоррекна или уже была использована')
+            logging.info("Пациент {0} успешно использовал некоррекную активировационную ссылку")
             return redirect('/login')

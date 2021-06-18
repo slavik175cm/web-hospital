@@ -50,7 +50,7 @@ class Doctor(Human):
     )
     qualification = models.TextField(null=True, blank=True, choices=qualifications, verbose_name='квалификация')
     specialty = models.ForeignKey('Specialty', on_delete=models.PROTECT, default="Null",
-                                  verbose_name='специальность', related_name='doctors')
+                                  verbose_name='специальность', related_name='doctors', db_index=True)
     user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
 
     @staticmethod

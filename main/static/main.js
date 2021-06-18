@@ -8,65 +8,63 @@
         profile: 5,
         history: 6
     };
-
+    const hideLoader = () => {
+        loader.style.display = 'none'
+    };
+    const saveData = (cases, recovered, deaths) => {
+        sessionStorage.setItem('cases', cases);
+        sessionStorage.setItem('recovered', recovered);
+        sessionStorage.setItem('deaths', deaths)
+    };
+    const showData = (cases, recovered, deaths) => {
+        const recovered_field = document.getElementById('recovered');
+        const deaths_field = document.getElementById('deaths');
+        const cases_field = document.getElementById('cases');
+        cases_field.innerText = "Всего случаев: " + cases;
+        recovered_field.innerText = "Выздоровело: " + recovered;
+        deaths_field.innerText = "Умерло: " + deaths
+    };
+    async function load_statistics() {
+        setTimeout(
+            () =>
+                fetch('https://covid2019-api.herokuapp.com/v2/country/belarus')
+                    .then(async (r) => {
+                        const {data} = await r.json();
+                        hideLoader();
+                        saveData(data.confirmed, data.recovered, data.deaths);
+                        showData(data.confirmed, data.recovered, data.deaths);
+                        sessionStorage.setItem('has_covid_loaded', "true");
+                    })
+                    .catch(() => {
+                        hideLoader();
+                        sessionStorage.setItem('has_covid_loaded', "true");
+                        sessionStorage.setItem('is_covid_loading', "false");
+                        const cases_field = document.getElementById('cases');
+                        cases_field.innerText = "данные не могут быть получены";
+                    }),
+            2000
+        );
+    }
     window.onload = async () => {
-        if (!sessionStorage.getItem('is_covid_loading')) {
-            sessionStorage.setItem('is_covid_loading', "false")
-        }
+        sessionStorage.setItem('is_covid_loading', "false")
         if (!sessionStorage.getItem('has_covid_loaded')) {
             sessionStorage.setItem('has_covid_loaded', "false")
         }
-        const is_covid_loading = sessionStorage.getItem('is_covid_loading');
-        const has_covid_loaded = sessionStorage.getItem('has_covid_loaded');
+        let is_covid_loading = sessionStorage.getItem('is_covid_loading');
+        let has_covid_loaded = sessionStorage.getItem('has_covid_loaded');
         const cases_field = document.getElementById('cases');
-        const recovered_field = document.getElementById('recovered');
-        const deaths_field = document.getElementById('deaths');
-        const loader = document.getElementById('loader');
-        const hideLoader = () => {
-            loader.style.display = 'none'
-        };
-        const saveData = (cases, recovered, deaths) => {
-            sessionStorage.setItem('cases', cases);
-            sessionStorage.setItem('recovered', recovered);
-            sessionStorage.setItem('deaths', deaths)
-        };
-        const showData = (cases, recovered, deaths) => {
-            cases_field.innerText = "Всего случаев: " + cases;
-            recovered_field.innerText = "Выздоровело: " + recovered;
-            deaths_field.innerText = "Умерло: " + deaths
-        };
         if (has_covid_loaded === "true") {
-            console.log("hey1");
             hideLoader();
-            if (is_covid_loading === 'false') {
+            if (sessionStorage.getItem('recovered') === null) {
                 cases_field.innerText = "данные не могут быть получены";
-            } else
+            } else {
                 showData(sessionStorage.getItem('cases'),
-                    sessionStorage.getItem('recovered'),
-                    sessionStorage.getItem('deaths'))
-
+                sessionStorage.getItem('recovered'),
+                sessionStorage.getItem('deaths'))
+            }
         } else if (is_covid_loading === 'false') {
-            console.log('hey3');
             sessionStorage.setItem('is_covid_loading', "true");
-            setTimeout(
-                () =>
-                    fetch('https://covid2019-api.herokuapp.com/v2/country/belarus')
-                        .then(async (r) => {
-                            const {data} = await r.json();
-                            hideLoader();
-                            saveData(data.confirmed, data.recovered, data.deaths);
-                            showData(data.confirmed, data.recovered, data.deaths);
-                            sessionStorage.setItem('has_covid_loaded', "true")
-                        })
-                        .catch(() => {
-                            hideLoader();
-                            // cases_field.innerText = "Время ожидания загрузки данных истекло"
-                            sessionStorage.setItem('has_covid_loaded', "true");
-                            sessionStorage.setItem('is_covid_loading', "false");
-                            cases_field.innerText = "данные не могут быть получены";
-                        }),
-                2000
-            );
+            load_statistics();
         }
 
 
@@ -103,8 +101,10 @@
         doctors.addEventListener('click', getCallbackChangeSessionStorage(Menu.doctors));
         schedule.addEventListener('click', getCallbackChangeSessionStorage(Menu.schedule));
         order.addEventListener('click', getCallbackChangeSessionStorage(Menu.order));
-        profile.addEventListener('click', getCallbackChangeSessionStorage(Menu.profile));
-        history.addEventListener('click', getCallbackChangeSessionStorage(Menu.history));
+        if (profile != null)
+            profile.addEventListener('click', getCallbackChangeSessionStorage(Menu.profile));
+        if (history != null)
+            history.addEventListener('click', getCallbackChangeSessionStorage(Menu.history));
 
         const btns = document.querySelectorAll('.day');
 
